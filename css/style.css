@@ -153,6 +153,25 @@ header .nav-menu__btn {
   padding: 10px;
 }
 
+.mypage__form .area-drop {
+  height: 200px;
+  width: 200px;
+  line-height: 200px;
+  position: relative;
+  background: #f6f5f4;
+  display: block;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.mypage__form .pic-drop {
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+}
+
 .mypage__list {
   width: 30%;
 }

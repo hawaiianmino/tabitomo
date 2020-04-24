@@ -25,12 +25,21 @@ require('auth.php');
             <div class="mypage mt-20">
                 <form action="" method="post" class="mypage__form">
                     <div>
-                        <label for="pic">プロフィール画像</label>
-                        <input type="file" id="pic" name="pic">
+                        プロフィール画像
+                        <label for="pic" class="area-drop">
+                            <input type="hidden" name="MAX_FILE_SIZE" value="3145728">
+                            <input type="file" id="pic" name="pic" class="pic-drop">
+                            <img src="" alt="">
+                            ドラッグ&ドロップ
+                        </label>
                     </div>
                     <div class="mt-20">
                         <label for="name">名前</label>
                         <input type="text" id="name" name="name">
+                    </div>
+                    <div class="mt-20">
+                        <label for="email">Eメール</label>
+                        <input type="text" id="email" name="email">
                     </div>
                     <div class="mt-20 w-20">
                         <label for="tel">年齢</label>
