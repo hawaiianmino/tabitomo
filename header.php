@@ -11,6 +11,8 @@
                 <li class="nav-menu__item"><a href="signup.php" class="nav-menu__btn">新規登録</a></li>
                 <?php }elseif($_SERVER['PHP_SELF'] === '/signup.php'){ ?>
                 <li class="nav-menu__item"><a href="login.php" class="nav-menu__btn">ログイン</a></li>
+                <?php }else{ ?>
+                <li class="nav-menu__item"><a href="logout.php" class="nav-menu__btn">ログアウト</a></li>
                 <?php } ?>
             </ul>
         </div>

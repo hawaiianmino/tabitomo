@@ -75,7 +75,7 @@ if(!empty($_POST)){
 
                 debug('セッション変数の中身：'.print_r($_SESSION,true));
                 debug('マイページへ遷移します。');
-                header("Location:mypage.php");//マイページへ
+                header("Location:profEdit.php");//マイページへ
             }else{
                 debug('パスワードがアンマッチです。');
                 $err_msg['common'] = MSG09;
