@@ -8,6 +8,10 @@ ini_set('log_errors','on');
 //ログの出力先を指定
 ini_set('error_log','php_log');
 
+//画面にエラーを表示する場合
+error_reporting(E_ALL); //E_STRICTレベル以外のエラーを報告する
+ini_set('display_errors','On'); //画面にエラーを表示させるか
+
 //================================
 // デバッグ
 //================================
@@ -96,6 +100,28 @@ function validEmail($str,$key){
     if(!preg_match("/^([a-zA-Z0-9])+([a-zA-Z0-9\._-])*@([a-zA-Z0-9_-])+([a-zA-Z0-9\._-]+)+$/", $str)){
         global $err_msg;
         $err_msg[$key] = MSG02;
+    }
+}
+//バリデーション関数(Email重複チェック)
+function validEmailDup($email){
+    global $err_msg;
+    //例外処理
+    try {
+        //DBヘ接続
+        $dbh = dbConnect();
+        $sql = 'SELECT count(*) FROM users WHERE email = :email AND delete_flg = 0';
+        $data = array(':email' => $email);
+        //クエリ実行
+        $stmt = queryPost($dbh, $sql, $data);
+        //クエリ結果の値を取得
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if(!empty(array_shift($result))){
+            $err_msg['email'] = MSG08;
+        }
+    } catch (Exception $e){
+        error_log('エラー発生：'.$e->getMessage());
+        $err_msg['common'] = MSG07;
     }
 }
 //バリデーション関数（同値チェック）
@@ -196,4 +222,141 @@ function queryPost($dbh,$sql,$data){
      }
      debug('クエリ成功');
      return $stmt;
+}
+function getUser($u_id){
+    debug('ユーザー情報を取得します。');
+    //例外処理
+    try {
+        //DBへ接続
+        $dbh = dbConnect();
+        //SQL文作成
+        $sql = 'SELECT * FROM users WHERE id = :u_id AND delete_flg = 0';
+        $data = array(':u_id' => $u_id);
+        //クエリ実行
+        $stmt = queryPost($dbh,$sql,$data);
+
+        //クエリ結果のデータを１レコード返却
+        if($stmt){
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        }else{
+            return false;
+        }
+    } catch (Exception $e){
+        error_log('エラー発生：'.$e->getMessage());
+    }
+}
+//目的情報の取得
+function getPurpose(){
+    debug('目的情報をDBから取得します');
+    
+    //例外処理
+    try{
+        $dbh = dbConnect();
+        //SQL文作成
+        $sql = 'SELECT * FROM purpose';
+        $data = array();
+        //クエリ実行
+        $stmt = queryPost($dbh,$sql,$data);
+    
+        if($stmt) {
+            //クエリ結果の全データを返却
+            return $stmt->fetchAll();
+        }else{
+            return false;
+        }
+    } catch(Exception $e){
+        error_log('エラー発生：'.$e->getMessage());
+    }
+}
+
+
+//================================
+// その他
+//================================
+//サニタイズ 
+function sanitize($str){
+    return htmlspecialchars($str,ENT_QUOTES);
+}
+function getFormData($str,$flg = false){
+    if($flg){
+        $method = $_GET;
+    }else{
+        $method = $_POST;
+    }
+    global $dbFormData;
+    global $err_msg;
+    //ユーザーデータがある場合
+    if(!empty($dbFormData)){
+        //フォームのエラーがある場合
+        if(!empty($err_msg[$str])){
+            //POSTにデータがある場合
+            if(isset($method[$str])){
+                return sanitize($method[$str]);
+            }else{
+                //ない場合(基本あり得ない)はDBの情報を表示
+                return $dbFormData[$str];
+            }
+        }else{
+            //POSTにデータがあり、DBの情報と違う場合
+            if(isset($method[$str]) && $method[$str] !== $dbFormData[$str]){
+                return sanitize($method[$str]);
+            }else{
+                return sanitize($dbFormData[$str]);
+            }
+        }
+    }else{
+        if(isset($method[$str])){
+            return sanitize($method[$str]);
+        }
+    }
+}
+function uploadImg($file,$key){
+    debug('画像アップロード処理開始');
+    debug('FILE情報：'.print_r($file,true));
+
+    if(isset($file['error']) && is_int($file['error'])){
+        try {
+            //バリデーション
+            // $file['error'] の値を確認。配列内には「UPLOAD_ERR_OK」などの定数が入っている。
+            //「UPLOAD_ERR_OK」などの定数はphpでファイルアップロード時に自動的に定義される。定数には値として0や1などの数値が入っている。
+            switch($file['error']){
+                case UPLOAD_ERR_OK: //OK
+                    break;
+                case UPLOAD_ERR_NO_FILE:
+                    throw new RuntimeException(('ファイルが選択されていません'));
+                case UPLOAD_ERR_INI_SIZE://php.ini定義の最大サイズが超過した場合
+                case UPLOAD_ERR_FORM_SIZE: //最大サイズを超過した場合
+                    throw new RuntimeException('ファイルが大きすぎます');
+                default:
+                    throw new RuntimeException('そのほかのエラーが発生しました');
+            }
+
+            // $file['mime']の値はブラウザ側で偽装可能なので、MIMEタイプを自前でチェックする
+            // exif_imagetype関数は「IMAGETYPE_GIF」「IMAGETYPE_JPEG」などの定数を返す
+            $type = @exif_imagetype($file['tmp_name']);
+            if(!in_array($type,[IMAGETYPE_GIF,IMAGETYPE_JPEG,IMAGETYPE_PNG],true)){//第3引数にtrueを指定すると厳密にチェック
+                throw new RuntimeException('画像形式が未対応です');
+            }
+
+             // ファイルデータからSHA-1ハッシュを取ってファイル名を決定し、ファイルを保存する
+            // ハッシュ化しておかないとアップロードされたファイル名そのままで保存してしまうと同じファイル名がアップロードされる可能性があり、
+            // DBにパスを保存した場合、どっちの画像のパスなのか判断つかなくなってしまう
+            // image_type_to_extension関数はファイルの拡張子を取得するもの
+            $path = 'uploads/'.sha1_file($file['tmp_name']).image_type_to_extension($type);
+            if(!move_uploaded_file($file['tmp_name'],$path)){
+                throw new RuntimeException('ファイル保存時にエラーが発生しました');
+            }
+            //保存したファイルパスのパーミッションを変更する
+            chmod($path,0644);
+
+            debug('ファイルは正常にアップロードされました');
+            debug('ファイルパス：'.$path);
+            return $path;
+        } catch (RuntimeException $e){
+
+            debug($e->getMessage());
+            global $err_msg;
+            $err_msg[$key] = $e->getMessage();
+        }
+    }
 }
