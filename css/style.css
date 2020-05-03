@@ -222,7 +222,7 @@ header .nav-menu__btn {
 .main-view {
   background: url("../img/main-view.jpg") no-repeat center;
   background-size: cover;
-  height: 400px;
+  height: 500px;
 }
 
 .main-view__txt {
@@ -335,9 +335,28 @@ header .nav-menu__btn {
   background-color: #eee;
 }
 
+.chat__scroll {
+  height: 500px;
+  overflow-y: scroll;
+  background-color: #fff;
+  padding: 20px 40px;
+}
+
 .chat__member1 {
   display: flex;
   align-items: center;
+  position: relative;
+}
+
+.chat__member1::before {
+  content: '';
+  display: inline-block;
+  border: 10px solid transparent;
+  border-right: 10px solid #fce38a;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 70px;
 }
 
 .chat__txt1 {
@@ -349,6 +368,18 @@ header .nav-menu__btn {
   display: flex;
   flex-direction: row-reverse;
   align-items: center;
+  position: relative;
+}
+
+.chat__member2::before {
+  content: '';
+  display: inline-block;
+  border: 10px solid transparent;
+  border-left: 10px solid #95e1d3;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 70px;
 }
 
 .chat__txt2 {
@@ -357,13 +388,13 @@ header .nav-menu__btn {
 }
 
 .chat__img1, .chat__img2 {
-  width: 100px;
-  height: 100px;
+  width: 70px;
+  height: 70px;
 }
 
 .chat__img1 img, .chat__img2 img {
   width: 100%;
-  min-width: 100px;
+  min-width: 70px;
   height: 100%;
   border-radius: 50%;
 }

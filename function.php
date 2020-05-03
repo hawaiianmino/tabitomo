@@ -245,9 +245,30 @@ function getUser($u_id){
         error_log('エラー発生：'.$e->getMessage());
     }
 }
-//目的情報の取得
-function getPurpose(){
-    debug('目的情報をDBから取得します');
+function getUserList(){
+    debug('ユーザーリストを取得します。');
+    //例外処理
+    try {
+        //DBへ接続
+        $dbh = dbConnect();
+        //SQL文作成
+        $sql = 'SELECT * FROM users';
+        $data = array();
+        //クエリ実行
+        $stmt = queryPost($dbh,$sql,$data);
+
+        //クエリ結果のデータを１レコード返却
+        if($stmt){
+            return $stmt->fetchAll();
+        }else{
+            return false;
+        }
+    } catch (Exception $e){
+        error_log('エラー発生：'.$e->getMessage());
+    }
+}
+function getPurposeList(){
+    debug('目的情報をDBからリストで取得します');
     
     //例外処理
     try{
@@ -259,12 +280,126 @@ function getPurpose(){
         $stmt = queryPost($dbh,$sql,$data);
     
         if($stmt) {
-            //クエリ結果の全データを返却
+            //クエリ結果を名前のみ返却
             return $stmt->fetchAll();
         }else{
             return false;
         }
     } catch(Exception $e){
+        error_log('エラー発生：'.$e->getMessage());
+    }
+}
+//目的の取得(個別)
+function getPurpose($p_id){
+    debug('目的情報をDBから取得します');
+    
+    //例外処理
+    try{
+        $dbh = dbConnect();
+        //SQL文作成
+        $sql = 'SELECT purpose FROM purpose WHERE id = :id';
+        $data = array(':id' => $p_id);
+        //クエリ実行
+        $stmt = queryPost($dbh,$sql,$data);
+    
+        if($stmt) {
+            //クエリ結果を名前のみ返却
+            $nakami = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $nakami['purpose'];
+        }else{
+            return false;
+        }
+    } catch(Exception $e){
+        error_log('エラー発生：'.$e->getMessage());
+    }
+}
+function getCountryList(){
+    debug('滞在地情報をDBからリストで取得します');
+    
+    //例外処理
+    try{
+        $dbh = dbConnect();
+        //SQL文作成
+        $sql = 'SELECT * FROM country';
+        $data = array();
+        //クエリ実行
+        $stmt = queryPost($dbh,$sql,$data);
+    
+        if($stmt) {
+            //クエリ結果の国名のみ返却
+            return $stmt->fetchAll();
+        }else{
+            return false;
+        }
+    } catch(Exception $e){
+        error_log('エラー発生：'.$e->getMessage());
+    }
+}
+//滞在地の取得
+function getCountry($c_id){
+    debug('滞在地情報をDBから取得します');
+    
+    //例外処理
+    try{
+        $dbh = dbConnect();
+        //SQL文作成
+        $sql = 'SELECT country_name FROM country WHERE id = :id';
+        $data = array(':id' => $c_id);
+        //クエリ実行
+        $stmt = queryPost($dbh,$sql,$data);
+    
+        if($stmt) {
+            //クエリ結果の国名のみ返却
+            $nakami = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $nakami['country_name'];
+        }else{
+            return false;
+        }
+    } catch(Exception $e){
+        error_log('エラー発生：'.$e->getMessage());
+    }
+}
+function getMsg($from_user,$to_user){
+    debug('msg情報を取得します。');
+    //例外処理
+    try {
+        $dbh = dbConnect();
+        //SQL文作成
+        $sql = 'SELECT send_date,to_user,from_user,msg,create_date FROM bord WHERE from_user = :from_user AND to_user = :to_user';
+        $data = array(':from_user' => $from_user,':to_user' => $to_user);
+        //クエリ実行
+        $stmt = queryPost($dbh,$sql,$data);
+    
+        if($stmt){
+            //クエリ結果の全データを返却
+            return $stmt->fetchAll();
+        }else{
+            return false;
+        }
+    } catch (Exception $e){
+        error_log('エラー発生：'.$e->getMessage());
+    }
+} 
+function getSearchList($country,$sex){
+    debug('検索結果を表示します');
+    //例外処理
+    try {
+        //DBヘ接続
+        $dbh = dbConnect();
+        //SQL文を作成
+        $sql = 'SELECT * FROM users';
+        if(!empty($country)) $sql .= ' WHERE country = '.$country;
+        if(!empty($sex)) $sql .= ' AND sex = :sex';
+        $data = array(':sex' => $sex);
+        //クエリ実行
+        $stmt = queryPost($dbh,$sql,$data);
+
+        if($stmt){
+            debug('サーチリストの取得に成功');
+            $result = $stmt->fetchAll();
+            return $result;
+        }
+    } catch (Exception $e){
         error_log('エラー発生：'.$e->getMessage());
     }
 }

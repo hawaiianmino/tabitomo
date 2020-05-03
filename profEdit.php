@@ -19,7 +19,9 @@ $dbFormData = getUser($_SESSION['user_id']);
 debug('取得したユーザー情報：'.print_r($dbFormData,true));
 
 //目的データ取得
-$purposes = getPurpose();
+$purposes = getPurposeList();
+//滞在地情報取得
+$countries = getCountryList();
 
 
 //post送信されていた場合
@@ -121,20 +123,25 @@ debug('画面表示処理終了 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
                         <label for="sex">性別</label>
                         <select name="sex" id="sex">
                             <option value="noselect" <?= ($dbFormData['sex'] == 'noselect') ? 'selected' : ''; ?>>未選択</option>
-                            <option value="man" <?= ($dbFormData['sex'] == 'man') ? 'selected' : ''; ?>>男</option>
-                            <option value="woman" <?= ($dbFormData['sex'] == 'woman') ? 'selected' : ''; ?>>女</option>
+                            <option value="男" <?= ($dbFormData['sex'] == '男') ? 'selected' : ''; ?>>男</option>
+                            <option value="女" <?= ($dbFormData['sex'] == '女') ? 'selected' : ''; ?>>女</option>
                         </select>
                     </div>
                     <div class="mt-20">
                         <label for="coutry">現在の滞在地</label>
-                        <input type="text" id="country" name="country" value="<?= getFormData('country'); ?>">
+                        <select name="country" id="country">
+                            <option value="0" <?= (getFormData('country') == 0) ? 'selected' : 0; ?> >---選択してください---</option>
+                            <?php foreach($countries as $key => $val): ?>
+                            <option value="<?= $val['id']; ?>" <?= (getFormData('country') == $val['id']) ? 'selected' : ''; ?>><?= $val['country_name']; ?></option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
                     <div class="mt-20">
                         <label for="purpose">目的</label>
                         <select name="purpose" id="purpose">
                             <option value="0" <?= (getFormData('purpose') == 0) ? 'selected' : ''; ?>>---選択してください---</option>
                             <?php foreach($purposes as $key => $val): ?>
-                                <option value="<?= $val['id']; ?>" <?= (getFormData('purpose') == $val['id']) ? 'selected' : ''; ?> ><?= $val['name']; ?></option>
+                                <option value="<?= $val['id']; ?>" <?= (getFormData('purpose') == $val['id']) ? 'selected' : ''; ?> ><?= $val['purpose']; ?></option>
                             <?php endforeach; ?>
                         </select>
                     </div>

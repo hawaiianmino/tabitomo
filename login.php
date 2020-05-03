@@ -54,7 +54,6 @@ if(!empty($_POST)){
             $stmt = queryPost($dbh,$sql,$data);
             //クエリ結果の値を取得
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
-
             debug('クエリ結果の中身：'.print_r($result,true));
 
             //パスワード格納
