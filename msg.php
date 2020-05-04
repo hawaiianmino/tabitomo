@@ -23,7 +23,6 @@ $myInfo = getUser($m_id);
 
 //メッセージデータを取得
 $viewData = getMsg($m_id,$u_id);
-$viewData2 = getMsg($u_id,$m_id);
 
 //パラメータに不正な値が入っていないかチェック
 if(empty($u_id)){
@@ -78,26 +77,21 @@ debug('画面表示処理終了 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
         <h2 class="txt-28 txt-center">メッセージ</h2>
         <div class="inner mt-20">
             <div class="chat__scroll">
-                <?php if(!empty($viewData)): ?>
-                    <?php foreach($viewData as $key => $val): ?> 
-                    <div class="chat__member1 mt-20">
-                        <div class="chat__img1"><img src="<?= $myInfo['pic']; ?>" alt=""></div>
-                        <p class="chat__txt1"><?= sanitize($val['msg']); ?></p>
-                    </div>
-                    <?php
-                        endforeach;
-                    endif;
-                    ?>
-                    <?php if(!empty($viewData2)): ?>
-                        <?php foreach($viewData2 as $key => $val): ?>
-                    <div class="chat__member2 mt-20">
-                        <div class="chat__img2"><img src="<?= $yourInfo['pic']; ?>" alt=""></div>
-                        <p class="chat__txt2"><?= sanitize($val['msg']); ?></p>
-                    </div>
+                <?php foreach($viewData as $key => $val): ?>
+                    <?php if($val['from_user'] == $m_id): ?>
+                        <div class="chat__member1 mt-20">
+                            <div class="chat__img1"><img src="<?= $myInfo['pic']; ?>" alt=""></div>
+                            <p class="chat__txt1"><?= sanitize($val['msg']); ?></p>
+                        </div>
+                    <?php else: ?>
+                        <div class="chat__member2 mt-20">
+                            <div class="chat__img2"><img src="<?= $yourInfo['pic']; ?>" alt=""></div>
+                            <p class="chat__txt2"><?= sanitize($val['msg']); ?></p>
+                        </div>
                 <?php
-                    endforeach;
-                endif;
-                ?>  
+                    endif;
+                endforeach;
+                ?>
             </div>
             <form action="" method="post" class="chat__msg mt-20">
                 <div class="chat__input">

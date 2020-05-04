@@ -365,7 +365,7 @@ function getMsg($from_user,$to_user){
     try {
         $dbh = dbConnect();
         //SQL文作成
-        $sql = 'SELECT send_date,to_user,from_user,msg,create_date FROM bord WHERE from_user = :from_user AND to_user = :to_user';
+        $sql = 'SELECT send_date,to_user,from_user,msg,create_date FROM bord WHERE from_user IN (:from_user,:to_user) AND to_user IN (:to_user,:from_user)';
         $data = array(':from_user' => $from_user,':to_user' => $to_user);
         //クエリ実行
         $stmt = queryPost($dbh,$sql,$data);

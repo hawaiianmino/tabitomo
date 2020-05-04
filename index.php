@@ -64,12 +64,12 @@ debug('画面表示処理終了 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
                     <div class="member__myMenu">
                         <p class="member__myMenu-ttl">My Menu</p>
                         <div class="member__myMenu-item mt-5">
-                            <a href="profEdit.php" class="txt-14">プロフィール編集</a>
+                            <a href="profEdit.php">プロフィール編集</a>
                         </div>
                         <p class="member__myMenu-ttl mt-20">会話中の旅トモ</p>
                         <ul class="mt-5">
-                            <li class="member__myMenu-item"><a href="" class="txt-14">旅トモ1</a></li>
-                            <li class="member__myMenu-item"><a href="" class="txt-14">旅トモ2</a></li>
+                            <li class="member__myMenu-item"><a href="">旅トモ1</a></li>
+                            <li class="member__myMenu-item"><a href="">旅トモ2</a></li>
                         </ul>
                     </div>
                 </form>
