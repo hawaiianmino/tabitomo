@@ -74,7 +74,7 @@ if(!empty($_POST)){
 
                 debug('セッション変数の中身：'.print_r($_SESSION,true));
                 debug('マイページへ遷移します。');
-                header("Location:profEdit.php");//マイページへ
+                header("Location:index.php");//マイページへ
             }else{
                 debug('パスワードがアンマッチです。');
                 $err_msg['common'] = MSG09;
@@ -97,13 +97,22 @@ debug('画面表示終了　<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<');
     <div class="login__box">
         <p class="login__ttl"><?= (basename(__FILE__) == 'login.php') ? 'ログイン' : '新規登録'; ?></p>
         <form class="login__form" action="" method="post">
+            <div class="area-msg">
+                <?= (!empty($err_msg['common'])) ? $err_msg['common'] : ''; ?>
+            </div>
             <div class="mt-30">
                 <label for="email" class="txt-18">Eメール</label>
                 <input class="login__input" type="text" id="email" name="email" value="<?= (!empty($_POST['email']) ? $_POST['email'] : ''); ?>">
             </div>
+            <div class="area-msg">
+                <?= (!empty($err_msg['email'])) ? $err_msg['email'] : ''; ?>
+            </div>
             <div class="mt-30">
                 <label for="pass" class="txt-18">パスワード</label>
                 <input class="login__input" type="password" id="pass" name="pass" value="<?= (!empty($_POST['pass']) ? $_POST['pass'] : ''); ?>">
+            </div>
+            <div class="area-msg">
+                <?= (!empty($err_msg['pass'])) ? $err_msg['pass'] : ''; ?>
             </div>
             <div class="mt-30 txt-center">
                 <input class="login__btn" type="submit" value="<?= (basename(__FILE__) == "login.php") ? 'ログイン' : '新規登録'; ?>">

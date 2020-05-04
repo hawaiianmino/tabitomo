@@ -23,11 +23,15 @@ $sex = (!empty($_GET['sex'])) ? $_GET['sex'] : '';
 //サーチ結果を取得
 $dbSearchData = getSearchList($country,$sex);
 
+debug('画面表示処理終了 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<');
 ?>
 
 <?php require('head.php');?>
 <?php require('header.php'); ?>
 <body>
+    <p id="js-show-msg" class="msg-slide" style="display: none;">
+        <?= getSessionFlash('msg_success'); ?>
+    </p>
     <section class="main-view">
         <div class="main-view__txt">
             <h2 class="txt-36">1人もいいけど、一緒はもっと楽しい。</h2>
@@ -37,6 +41,7 @@ $dbSearchData = getSearchList($country,$sex);
         <div class="inner">
             <div class="member__search">
                 <form action="" method="get">
+                    <p class="member__myMenu-ttl">検索</p>
                     <div class="member__search-item">
                         <label for="country">滞在先：</label>
                         <select name="c_id" id="country" class="mt-10">
@@ -53,9 +58,20 @@ $dbSearchData = getSearchList($country,$sex);
                         </select>
                     </div>
                     <div class="mt-20">
-                        <input type="submit" class="member__btn" value="検索する">
+                        <input type="submit" class="member__btn txt-14" value="検索する">
                     </div>
-                    <p><a href="profEdit.php">プロフィールを編集する</a></p>
+                    <hr class="mt-20 mb-20">
+                    <div class="member__myMenu">
+                        <p class="member__myMenu-ttl">My Menu</p>
+                        <div class="member__myMenu-item mt-5">
+                            <a href="profEdit.php" class="txt-14">プロフィール編集</a>
+                        </div>
+                        <p class="member__myMenu-ttl mt-20">会話中の旅トモ</p>
+                        <ul class="mt-5">
+                            <li class="member__myMenu-item"><a href="" class="txt-14">旅トモ1</a></li>
+                            <li class="member__myMenu-item"><a href="" class="txt-14">旅トモ2</a></li>
+                        </ul>
+                    </div>
                 </form>
             </div>
             <div class="member__list">

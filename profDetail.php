@@ -7,13 +7,8 @@ debug('「　プロフィール詳細ページ　');
 debug('「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「「');
 debugLogStart();
 
-//================================
-// 画面処理
-//================================
-$partnerUserId = '';
-$partnerUserInfo = '';
-$myUserInfo = '';
-$productInfo = '';
+//ログイン認証
+require('auth.php');
 
 // 画面表示用データ取得
 //================================
@@ -43,36 +38,8 @@ if(empty($yourInfo)){
     error_log('エラー発生：不正な値が入りました');
     header('Location:index.php');
 }
+
 debug('取得したDBデータ：'.print_r($yourInfo,true));
-
-//post送信されていた場合
-if(!empty($_POST) && isset($_REQUEST['send'])){
-    debug('POST送信があります。');
-
-    //ログイン認証
-    require('auth.php');
-
-    //例外処理
-    try {
-        $dbh = dbConnect();
-        //SQL文作成
-        $sql = 'INSERT INTO bord (bord_id,send_date,to_user,from_user,msg,create_date) VALUES (:b_id,:send_date,:to_user,:from_user,:msg,:date )';
-        $data = array(':b_id' => $u_id,':send_date' => date('Y-m-d H:i:s'),'to_user' => $yourInfo['id'],'from_user' => $_SESSION['user_id'],':msg' => $_POST['message'],':date' => date('Y-m-d H:i:s'));
-        //クエリ実行
-        $stmt = queryPost($dbh,$sql,$data);
-
-        //クエリ成功の場合
-        if($stmt){
-            $_POST = array();//postをクリア
-            debug('メッセージの投稿に成功しました。');
-            header("Location:".$_SERVER['PHP_SELF']."?u_id=".$u_id);
-        }
-    }  catch (Exception $e){
-        error_log('エラー発生：'.$e->getMessage());
-        $err_msg['common'] = MSG07;
-    }
-
-}
 
 debug('画面表示処理終了 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<');
 
@@ -83,65 +50,34 @@ debug('画面表示処理終了 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 <body>
     <section id="profile" class="profile">
         <div class="inner">
-            <h2 class="txt-28 txt-center">プロフィール詳細</h2>
+            <div class="profile__top">
+                <div class="profile__img">
+                    <img src="<?= $yourInfo['pic']; ?>" alt="プロフィール画像">
+                </div>
+                <p class="txt-center mt-10 txt-28"><?= $yourInfo['name']; ?></p>
+                <div class="txt-center mt-10">
+                    <a href="<?= 'msg.php?u_id='.$u_id; ?>" class="chat__btn txt-18">会話したい</a>
+                </div>
+            </div>
+            <hr>
             <div class="profile__wrap mt-20">
-                <div class="profile__item">
-                    <img src="<?= $yourInfo['pic']; ?>" alt="">
+                <h2 class="txt-28 txt-center">PROFILE</h2>
+                <div class="mt-20">
+                    <p><?= $yourInfo['greeting']; ?></p>
                 </div>
-                <div class="profile__item">
-                    <div>
-                        <h3>名前：<?= $yourInfo['name']; ?></h3>
-                    </div>
-                    <div class="mt-10">
-                        <h3>性別：<?= $yourInfo['sex']; ?></h3>
-                    </div>
-                    <div class="mt-10">
-                        <h3>滞在地：<?= getCountry($c_info); ?></h3>
-                    </div>
-                    <div class="mt-10">
-                        <h3>目的：<?= getPurpose($p_info); ?></h3>
-                    </div>
-                    <div class="mt-20">
-                        <h3>自己紹介：</h3>
-                        <p><?= $yourInfo['greeting']; ?></p>
-                    </div>
+                <table class="profile__info mt-20">
+                    <tr><td>名前(ニックネーム)</td><td><?= $yourInfo['name'] ?></td></tr>
+                    <tr><td>性別</td><td><?= $yourInfo['sex']; ?></td></tr>
+                    <tr><td>滞在地</td><td><?= getCountry($c_info); ?></td></tr>
+                    <tr><td>目的</td><td><?= getPurpose($p_info); ?></td></tr>
+                </table>
+                <div class="txt-center mt-20 mb-20">
+                    <a href="<?= 'msg.php?u_id='.$u_id; ?>" class="chat__btn txt-18">会話したい</a>
+                </div>
+                <div class="return-btn txt-center mb-20 txt-14">
+                    <a href="index.php">前画面へ戻る</a>
                 </div>
             </div>
-        </div>
-    </section>
-    <section id="chat" class="chat">
-        <h2 class="txt-28 txt-center">メッセージ</h2>
-        <div class="inner mt-20">
-            <div class="chat__scroll">
-                <?php if(!empty($viewData)): ?>
-                    <?php foreach($viewData as $key => $val): ?> 
-                    <div class="chat__member1 mt-20">
-                        <div class="chat__img1"><img src="<?= $myInfo['pic']; ?>" alt=""></div>
-                        <p class="chat__txt1"><?= sanitize($val['msg']); ?></p>
-                    </div>
-                    <?php
-                        endforeach;
-                    endif;
-                    ?>
-                    <?php if(!empty($viewData2)): ?>
-                        <?php foreach($viewData2 as $key => $val): ?>
-                    <div class="chat__member2 mt-20">
-                        <div class="chat__img2"><img src="<?= $yourInfo['pic']; ?>" alt=""></div>
-                        <p class="chat__txt2"><?= sanitize($val['msg']); ?></p>
-                    </div>
-                <?php
-                    endforeach;
-                endif;
-                ?>  
-            </div>
-            <form action="" method="post" class="chat__msg mt-20">
-                <div class="chat__input">
-                    <textarea name="message" id="message" cols="30" rows="5"></textarea>
-                    <div class="txt-right mt-10">
-                        <input type="submit" value="送信する" class="chat__btn" name="send">
-                    </div>
-                </div>
-            </form>
         </div>
     </section>
 </body>

@@ -7,6 +7,16 @@ Copyright&ensp;<a href="http://50storm.info/">tabitomo</a>.&ensp;All Rights Rese
 <script>
     $(function(){
 
+        //メッセージ表示
+        var $jsShowMsg = $('#js-show-msg');
+        var msg = $jsShowMsg.text();
+        if(msg.replace(/^[\s　]+|[\s　]+$/g,"").length){
+            $jsShowMsg.slideToggle('slow');
+            setTimeout(() => {
+                $jsShowMsg.slideToggle('slow');
+            }, 5000);
+        }
+
         //画像ライブプレビュー
         var $dropArea = $('.area-drop');
         var $fileInput = $('.input-file');

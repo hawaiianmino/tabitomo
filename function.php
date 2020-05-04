@@ -68,7 +68,7 @@ define('MSG09', 'メールアドレスまたはパスワードが違います');
 define('MSG10', '電話番号の形式が違います');
 define('MSG11', '郵便番号の形式が違います');
 define('MSG12', '古いパスワードが違います');
-define('MSG13', '古いパスワードと同じです');
+define('MSG13', '古いパスワードと違うものを設定してください');
 define('MSG14', '文字で入力してください');
 define('MSG15', '正しくありません');
 define('MSG16', '有効期限が切れています');
@@ -404,6 +404,25 @@ function getSearchList($country,$sex){
     }
 }
 
+//================================
+// メール送信
+//================================
+function sendMail($from,$to,$subject,$comment){
+    if(!empty($to) && !empty($subject) && !empty($comment)){
+        //文字化けしないように設定
+        mb_language("Japanese");
+        mb_internal_encoding("UTF-8");
+
+        //メールを送信して結果を変数に代入
+        $result = mb_send_mail($to,$subject,$comment,"From:".$from);
+        //送信結果を判定
+        if($result){
+            debug('メールを送信しました。');
+        }else{
+            debug('【エラー発生】メールの送信に失敗しました。');
+        }
+    }
+}
 
 //================================
 // その他
@@ -493,5 +512,13 @@ function uploadImg($file,$key){
             global $err_msg;
             $err_msg[$key] = $e->getMessage();
         }
+    }
+}
+//sessionを１回のみ取得
+function getSessionFlash($key){
+    if(!empty($_SESSION[$key])){
+        $data = $_SESSION[$key];
+        $_SESSION[$key] = '';
+        return $data;
     }
 }

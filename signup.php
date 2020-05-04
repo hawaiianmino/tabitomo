@@ -100,13 +100,22 @@ debug('画面表示終了　<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<');
                 <label for="email" class="txt-18">Eメール</label>
                 <input class="signup__input" type="text" id="email" name="email" value="<?= (!empty($_POST['email']) ? $_POST['email'] : ''); ?>">
             </div>
+            <div class="area-msg">
+                <?= (!empty($err_msg['email'])) ? $err_msg['email'] : ''; ?>
+            </div>
             <div class="mt-30">
                 <label for="pass" class="txt-18">パスワード</label>
                 <input class="signup__input" type="password" id="pass" name="pass" value="<?= (!empty($_POST['pass']) ? $_POST['pass'] : ''); ?>">
             </div>
+            <div class="area-msg">
+                <?= (!empty($err_msg['pass'])) ? $err_msg['pass'] : ''; ?>
+            </div>
             <div class="mt-30">
                 <label for="pass_re" class="txt-18">パスワード(再入力)</label>
                 <input class="signup__input" type="password" id="pass_re" name="pass_re" value="<?= (!empty($_POST['pass_re']) ? $_POST['pass_re'] : ''); ?>">
+            </div>
+            <div class="area-msg">
+                <?= (!empty($err_msg['pass_re'])) ? $err_msg['pass_re'] : ''; ?>
             </div>
             <div class="mt-30 txt-center">
                 <input class="signup__btn" type="submit" value="登録する">

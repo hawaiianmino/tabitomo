@@ -75,7 +75,7 @@ if(!empty($_POST)){
             if($stmt){
                 $_SESSION['msg_success'] = SUC02;
                 debug('マイページへ遷移します。');
-                header('Location:mypage.php');//マイページへ
+                header('Location:index.php');//トップページへ
             }
         } catch (Exception $e){
             error_log('エラー発生：'.$e->getMessage());
@@ -155,9 +155,9 @@ debug('画面表示処理終了 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
                 </form>
                 <div class="mypage__list">
                     <ul class="list-items">
-                        <li><a href="">パスワード変更</a></li>
-                        <li><a href="">退会</a></li>
-                        <li><a href="">マイページトップ</a></li>
+                        <li><a href="passEdit.php">パスワード変更</a></li>
+                        <li><a href="withdraw.php">退会</a></li>
+                        <li><a href="index.php">トップページへ</a></li>
                     </ul>
                 </div>
             </div>
