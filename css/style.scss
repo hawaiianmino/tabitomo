@@ -65,15 +65,31 @@ $btn-color:#f38181;
 
 
 /********************
+    レスポンシブ対応
+********************/
+/*変数宣言*/
+$tab: 768px; // タブレット
+$sp: 480px;  // スマホ
+
+@mixin tab {
+  @media (max-width: ($tab)) {
+    @content;
+  }
+}
+@mixin sp {
+  @media (max-width: ($sp)) {
+    @content;
+  }
+}
+
+
+
+/********************
     1. header
 ********************/
 header{
     background-color: $main-color;
     border-bottom: 1px solid #fdda5b;
-    // position: fixed;
-    // top: 0;
-    // left: 0;
-    // right: 0;
     .header{
         display: flex;
         justify-content: space-between;
@@ -87,9 +103,6 @@ header{
         display: flex;
         justify-content: space-between;
         align-items: center;
-        // &__item:first-child{
-        //     margin-right: 20px;
-        // }
         &__btn{
             padding: 10px 20px;
             background-color: $third-color;
@@ -109,11 +122,17 @@ header{
     background-size: cover;
     background-color: rgba(0,0,0,0.4);
     background-blend-mode: darken;
+    .mt-30{
+        margin-top: 15px;
+    }
     &__ttl{
-        font-size: 30px;
+        font-size: 3rem;
         text-align: center;
         font-weight: 700;
         letter-spacing:  3px;
+        @include sp(){
+            font-size: 2rem;
+        }
     }
     &__box{
         width: 70%;
@@ -127,6 +146,10 @@ header{
         transform: translate(-50%,-50%);
         border: 1px solid rgb(196, 196, 196);
         border-radius: 5px!important;
+        @include sp(){
+            width: 90%;
+            padding: 20px;
+        }
     }
     &__input{
         display: block;
@@ -150,13 +173,19 @@ header{
 ********************/
 .mypage{
     display: flex;
+    @include sp(){
+        flex-direction: column;
+    }
     &__form{
         width: 70%;
         padding: 30px 50px;
         border: 2px solid #eee;
         position: relative;
+        @include sp(){
+            width: 100%;
+            padding: 10px;
+        }
         .input-file{
-            // padding: 0;
             opacity: 0;
             position: absolute;
             top: 0;
@@ -174,6 +203,9 @@ header{
             width: 80%;
             margin-left: auto;
             margin-right: auto;
+            @include sp(){
+                width: 90%;
+            }
         }
         input,textarea,select{
             display: block;
@@ -196,12 +228,21 @@ header{
     }
     &__list{
         width: 30%;
+        @include sp(){
+            width: 100%;
+        }
     }
     .list-items{
         padding: 20px;
         margin-left: 10px;
         background-color: #eee;
         min-height: 300px;
+        @include sp(){
+            min-height: initial;
+            margin-left: 0;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
         li{
             margin-bottom: 20px;
         }
@@ -217,7 +258,7 @@ header{
     4. index.php
 ********************/
 .main-view{
-    background: url('../img/main-view.jpg') no-repeat center;
+    background: url('../img/main-view2.jpg') no-repeat center;
     background-size: cover;
     height: 500px;
     &__txt{
@@ -227,12 +268,21 @@ header{
         transform: translateY(-50%);
         color: #fff;
     }
+    @include sp(){
+        .txt-36{
+            font-size: 2.5rem;
+        }
+    }
 }
 .member{
     padding: 60px 0;
     .inner{
         display: flex;
         justify-content: center;
+        align-items: flex-start;
+        @include sp(){
+            display: block;
+        }
     }
     &__myMenu-ttl{
         width: 100%;
@@ -251,6 +301,13 @@ header{
         padding:30px 20px;
         background-color: #eee;
         margin-right: 20px;
+        &--reset{
+            text-decoration: underline;
+        }
+        @include sp(){
+            width: 100%;
+            margin-right: 5px;
+        }
     }
     &__search-item{
         padding: 5px;
@@ -267,12 +324,22 @@ header{
         align-items: flex-end;
         justify-content: flex-start;
         flex-wrap: wrap;
+        @include sp(){
+            width: 100%;
+            margin-top: 20px;
+        }
     }
     &__item{
         width: calc(33.33333333% - 30px / 3);
         margin-bottom: 10px;
         margin-right: 5px;
         margin-left: 5px;
+        @include tab(){
+            width: calc(50% - 20px / 2);
+        }
+        @include sp(){
+            width: calc(100% - 10px);
+        }
     }
     &__img{
         text-align: center;
@@ -309,6 +376,12 @@ header{
     text-align: center;
     font-size: 1.6rem;
     line-height: 40px;
+}
+.sp-only{
+    display: none;
+    @include sp(){
+        display: block;
+    }
 }
 /****************************
     5. profDetail.php/msg.php
@@ -355,6 +428,9 @@ header{
         // border: 1px solid black;
         background-color: #fff;
         padding: 20px 40px;
+        @include sp(){
+            padding: 5px;
+        }
     }
     &__member1{
         display: flex;
@@ -420,6 +496,9 @@ header{
         textarea{
             width: 100%;
         }
+        @include sp(){
+            width: 100%;
+        }
     }
     &__btn{
         display: inline-block;
@@ -442,4 +521,7 @@ header{
     align-items: center;
     justify-content: center;
     background-color: $main-color;
+    @include sp(){
+        font-size: 1.4rem;
+    }
 }

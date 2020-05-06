@@ -34,7 +34,7 @@ debug('画面表示処理終了 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     </p>
     <section class="main-view">
         <div class="main-view__txt">
-            <h2 class="txt-36">1人もいいけど、一緒はもっと楽しい。</h2>
+            <h2 class="txt-36">1人もいいけど、<br class="sp-only">一緒はもっと楽しい。</h2>
         </div>
     </section>
     <section class="member">
@@ -60,17 +60,15 @@ debug('画面表示処理終了 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
                     <div class="mt-20">
                         <input type="submit" class="member__btn txt-14" value="検索する">
                     </div>
+                    <div class="member__search--reset mt-20 txt-14">
+                        <a href="index.php">検索結果をリセット</a>
+                    </div>
                     <hr class="mt-20 mb-20">
                     <div class="member__myMenu">
                         <p class="member__myMenu-ttl">My Menu</p>
                         <div class="member__myMenu-item mt-5">
                             <a href="profEdit.php">プロフィール編集</a>
                         </div>
-                        <p class="member__myMenu-ttl mt-20">会話中の旅トモ</p>
-                        <ul class="mt-5">
-                            <li class="member__myMenu-item"><a href="">旅トモ1</a></li>
-                            <li class="member__myMenu-item"><a href="">旅トモ2</a></li>
-                        </ul>
                     </div>
                 </form>
             </div>
@@ -92,54 +90,6 @@ debug('画面表示処理終了 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
                 <?php if(empty($dbSearchData)): ?>
                     <p>検索結果がありませんでした。</p>
                 <?php endif; ?>
-                <div class="member__item">
-                    <p class="member__img"><img src="img/mypic.jpg" alt=""></p>
-                    <div class="member__txt">
-                        <p>名前：五十嵐稔</p>
-                        <p>性別：男</p>
-                        <p>滞在先：ベトナム</p>
-                        <p>目的：お話したい</p>
-                        <div class="txt-center">
-                            <a href="#" class="member__btn mt-10">詳細を見る</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="member__item">
-                    <p class="member__img"><img src="img/mypic.jpg" alt=""></p>
-                    <div class="member__txt">
-                        <p>名前：五十嵐稔</p>
-                        <p>性別：男</p>
-                        <p>滞在先：ベトナム</p>
-                        <p>目的：お話したい</p>
-                        <div class="txt-center">
-                            <a href="#" class="member__btn mt-10">詳細を見る</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="member__item">
-                    <p class="member__img"><img src="img/mypic.jpg" alt=""></p>
-                    <div class="member__txt">
-                        <p>名前：五十嵐稔</p>
-                        <p>性別：男</p>
-                        <p>滞在先：ベトナム</p>
-                        <p>目的：お話したい</p>
-                        <div class="txt-center">
-                            <a href="#" class="member__btn mt-10">詳細を見る</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="member__item">
-                    <p class="member__img"><img src="img/mypic.jpg" alt=""></p>
-                    <div class="member__txt">
-                        <p>名前：五十嵐稔</p>
-                        <p>性別：男</p>
-                        <p>滞在先：ベトナム</p>
-                        <p>目的：お話したい</p>
-                        <div class="txt-center">
-                            <a href="#" class="member__btn mt-10">詳細を見る</a>
-                        </div>
-                    </div>
-                </div>
             </div>
 
         </div>

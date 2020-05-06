@@ -267,6 +267,28 @@ function getUserList(){
         error_log('エラー発生：'.$e->getMessage());
     }
 }
+function getUserExceptOne($id){
+    debug('ユーザーリストを取得します。');
+    //例外処理
+    try {
+        //DBへ接続
+        $dbh = dbConnect();
+        //SQL文作成
+        $sql = 'SELECT * FROM users WHERE id != :id';
+        $data = array(':id' => $id);
+        //クエリ実行
+        $stmt = queryPost($dbh,$sql,$data);
+
+        //クエリ結果のデータを１レコード返却
+        if($stmt){
+            return $stmt->fetchAll();
+        }else{
+            return false;
+        }
+    } catch (Exception $e){
+        error_log('エラー発生：'.$e->getMessage());
+    }
+}
 function getPurposeList(){
     debug('目的情報をDBからリストで取得します');
     
